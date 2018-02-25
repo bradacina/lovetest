@@ -1,17 +1,24 @@
-local Circle = Class:extend()
+local Circle = GameObject:extend()
 
-function Circle:new(x,y,radius)
-  self.x = x or 0
-  self.y = y or 0
+local function dieAfter(self)
+  self.dead = true
+end
+
+function Circle:new(area, x,y,radius)
+  Circle.super.new(self, area, x, y)
   self.radius = radius or 0
-  self.visible = true
+  
+  local dieAfterSec = love.math.random(2)
+  self.timer:after(dieAfterSec, function() dieAfter(self) end)
 end
 
 function Circle:draw()
-  if self.visible then
     love.graphics.setColor(255,255,255)
     love.graphics.circle("fill", self.x, self.y, self.radius)
-  end
+end
+
+function Circle:update(dt)
+  Circle.super.update(self,dt)
 end
 
 return Circle
